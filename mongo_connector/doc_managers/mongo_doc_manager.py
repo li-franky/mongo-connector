@@ -82,6 +82,8 @@ class DocManager(DocManagerBase):
         self.meta_collection_cap_size = kwargs.get(
             "meta_collection_cap_size", constants.DEFAULT_META_COLLECTION_CAP_SIZE
         )
+        self.append_field = kwargs.get("append_field","");
+        self.append_field_value = kwargs.get("append_field_value","");
 
         # The '_id' field has to be unique, so if we will be writing data from
         # different namespaces into single collection, we use a different field
@@ -190,6 +192,8 @@ class DocManager(DocManagerBase):
     def upsert(self, doc, namespace, timestamp):
         """Update or insert a document into Mongo
         """
+		if(self.append_field)
+			doc[self.append_field] = self.append_field_value
         database, coll = self._db_and_collection(namespace)
 
         meta_collection_name = self._get_meta_collection(namespace)
@@ -216,6 +220,8 @@ class DocManager(DocManagerBase):
                 for i in range(self.chunk_size):
                     try:
                         doc = next(docs)
+						if(self.append_field)
+							doc[self.append_field] = self.append_field_value
                         selector = {"_id": doc["_id"]}
                         bulk.find(selector).upsert().replace_one(doc)
                         meta_selector = {self.id_field: doc["_id"]}
