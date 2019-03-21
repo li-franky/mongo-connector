@@ -150,7 +150,9 @@ class DocManager(DocManagerBase):
         if doc.get("create"):
             new_db, coll = self.command_helper.map_collection(db, doc["create"])
             if new_db:
-                self.mongo[new_db].create_collection(coll)
+                collist = self.mongo[new_db].list_collection_names()
+                if coll not in collist:
+                    self.mongo[new_db].create_collection(coll)
 
         if doc.get("drop"):
             new_db, coll = self.command_helper.map_collection(db, doc["drop"])
