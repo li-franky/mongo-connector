@@ -192,8 +192,8 @@ class DocManager(DocManagerBase):
     def upsert(self, doc, namespace, timestamp):
         """Update or insert a document into Mongo
         """
-		if(self.append_field)
-			doc[self.append_field] = self.append_field_value
+        if self.append_field:
+            doc[self.append_field] = self.append_field_value
         database, coll = self._db_and_collection(namespace)
 
         meta_collection_name = self._get_meta_collection(namespace)
@@ -220,8 +220,8 @@ class DocManager(DocManagerBase):
                 for i in range(self.chunk_size):
                     try:
                         doc = next(docs)
-						if(self.append_field)
-							doc[self.append_field] = self.append_field_value
+                        if self.append_field:
+                            doc[self.append_field] = self.append_field_value
                         selector = {"_id": doc["_id"]}
                         bulk.find(selector).upsert().replace_one(doc)
                         meta_selector = {self.id_field: doc["_id"]}
